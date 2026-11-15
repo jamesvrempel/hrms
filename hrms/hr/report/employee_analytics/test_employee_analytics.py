@@ -3,7 +3,7 @@ from frappe import _
 from frappe.desk.page.setup_wizard.setup_wizard import make_records
 from frappe.tests.utils import FrappeTestCase
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.report.employee_analytics.employee_analytics import execute
 

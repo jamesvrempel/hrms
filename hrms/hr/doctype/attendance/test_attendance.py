@@ -18,7 +18,7 @@ from frappe.utils import (
 )
 from frappe.utils.user import add_role
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.doctype.attendance.attendance import (
 	DuplicateAttendanceError,

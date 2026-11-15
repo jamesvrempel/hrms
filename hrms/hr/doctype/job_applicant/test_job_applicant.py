@@ -5,7 +5,7 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import nowdate
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.doctype.job_applicant.job_applicant import make_employee as map_applicant_to_employee
 from hrms.hr.doctype.job_offer.test_job_offer import create_job_offer

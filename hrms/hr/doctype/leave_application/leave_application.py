@@ -20,8 +20,8 @@ from frappe.utils import (
 	nowdate,
 )
 
-from erpnext.buying.doctype.supplier_scorecard.supplier_scorecard import daterange
-from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
+from es_erp.buying.doctype.supplier_scorecard.supplier_scorecard import daterange
+from es_erp.setup.doctype.employee.employee import get_holiday_list_for_employee
 
 import hrms
 from hrms.api import get_current_employee_info

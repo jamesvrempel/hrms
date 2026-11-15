@@ -5,9 +5,9 @@ import frappe
 from frappe.tests.utils import FrappeTestCase, change_settings
 from frappe.utils import add_days, now_datetime, today
 
-from erpnext.assets.doctype.asset.test_asset import create_asset_data
-from erpnext.setup.doctype.employee.test_employee import make_employee
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from es_erp.assets.doctype.asset.test_asset import create_asset_data
+from es_erp.setup.doctype.employee.test_employee import make_employee
+from es_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 
 class TestFullandFinalStatement(FrappeTestCase):

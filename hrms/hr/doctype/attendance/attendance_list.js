@@ -30,7 +30,7 @@ frappe.listview_settings["Attendance"] = {
 						options: "Employee",
 						get_query: () => {
 							return {
-								query: "erpnext.controllers.queries.employee_query",
+								query: "es_erp.controllers.queries.employee_query",
 							};
 						},
 						reqd: 1,

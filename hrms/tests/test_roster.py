@@ -2,7 +2,7 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import add_days, getdate
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.api.roster import get_shifts, insert_shift
 

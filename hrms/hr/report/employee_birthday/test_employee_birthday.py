@@ -2,7 +2,7 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import getdate
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.doctype.staffing_plan.test_staffing_plan import make_company
 from hrms.hr.report.employee_birthday.employee_birthday import execute

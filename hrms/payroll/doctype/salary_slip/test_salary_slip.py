@@ -24,10 +24,10 @@ from frappe.utils import (
 )
 from frappe.utils.make_random import get_random
 
-import erpnext
-from erpnext.accounts.utils import get_fiscal_year
-from erpnext.setup.doctype.employee.employee import InactiveEmployeeStatusError
-from erpnext.setup.doctype.employee.test_employee import make_employee
+import es_erp
+from es_erp.accounts.utils import get_fiscal_year
+from es_erp.setup.doctype.employee.employee import InactiveEmployeeStatusError
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.doctype.leave_allocation.test_leave_allocation import create_leave_allocation
 from hrms.hr.doctype.leave_type.test_leave_type import create_leave_type
@@ -384,7 +384,7 @@ class TestSalarySlip(FrappeTestCase):
 	)
 	def test_payment_days_for_mid_joinee_including_holidays_and_unmarked_days(self):
 		# tests mid month joining and relieving along with unmarked days
-		from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
+		from es_erp.setup.doctype.holiday_list.holiday_list import is_holiday
 
 		no_of_days = get_no_of_days()
 		month_start_date, month_end_date = get_first_day(nowdate()), get_last_day(nowdate())
@@ -421,7 +421,7 @@ class TestSalarySlip(FrappeTestCase):
 		},
 	)
 	def test_payment_days_for_mid_joinee_excluding_holidays(self):
-		from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
+		from es_erp.setup.doctype.holiday_list.holiday_list import is_holiday
 
 		no_of_days = get_no_of_days()
 		month_start_date, month_end_date = get_first_day(nowdate()), get_last_day(nowdate())
@@ -526,7 +526,7 @@ class TestSalarySlip(FrappeTestCase):
 
 	@change_settings("Payroll Settings", {"payroll_based_on": "Attendance"})
 	def test_payment_days_in_salary_slip_based_on_timesheet(self):
-		from erpnext.projects.doctype.timesheet.test_timesheet import make_timesheet
+		from es_erp.projects.doctype.timesheet.test_timesheet import make_timesheet
 
 		emp = make_employee(
 			"test_employee_timesheet@salary.com",
@@ -704,7 +704,7 @@ class TestSalarySlip(FrappeTestCase):
 		},
 	)
 	def test_consider_marked_attendance_on_holidays_with_unmarked_attendance(self):
-		from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
+		from es_erp.setup.doctype.holiday_list.holiday_list import is_holiday
 
 		no_of_days = get_no_of_days()
 		month_start_date, month_end_date = get_first_day(nowdate()), get_last_day(nowdate())
@@ -756,7 +756,7 @@ class TestSalarySlip(FrappeTestCase):
 		},
 	)
 	def test_consider_marked_attendance_on_holidays_with_half_day_on_holiday(self):
-		from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
+		from es_erp.setup.doctype.holiday_list.holiday_list import is_holiday
 
 		no_of_days = get_no_of_days()
 		month_start_date, month_end_date = get_first_day(nowdate()), get_last_day(nowdate())
@@ -973,7 +973,7 @@ class TestSalarySlip(FrappeTestCase):
 		)
 
 	def test_payroll_frequency(self):
-		fiscal_year = get_fiscal_year(nowdate(), company=erpnext.get_default_company())[0]
+		fiscal_year = get_fiscal_year(nowdate(), company=es_erp.get_default_company())[0]
 		month = "%02d" % getdate(nowdate()).month
 		m = get_month_details(fiscal_year, month)
 
@@ -1401,7 +1401,7 @@ class TestSalarySlip(FrappeTestCase):
 		frappe.db.rollback()
 
 	def test_salary_slip_from_timesheet(self):
-		from erpnext.projects.doctype.timesheet.test_timesheet import make_timesheet
+		from es_erp.projects.doctype.timesheet.test_timesheet import make_timesheet
 
 		emp = make_employee("test_employee_6@salary.com", company="_Test Company")
 		make_salary_structure_for_timesheet(emp)
@@ -2156,7 +2156,7 @@ class TestSalarySlip(FrappeTestCase):
 				"overwrite_salary_structure_amount": 1,
 				"amount": 0,
 				"payroll_date": payroll_period.start_date,
-				"currency": erpnext.get_default_currency(),
+				"currency": es_erp.get_default_currency(),
 			}
 		).submit()
 
@@ -2294,7 +2294,7 @@ def make_salary_component(salary_components, test_tax, company_list=None):
 
 
 def set_salary_component_account(sal_comp, company_list=None):
-	company = erpnext.get_default_company()
+	company = es_erp.get_default_company()
 
 	if company_list and company and company not in company_list:
 		company_list.append(company)
@@ -2495,8 +2495,8 @@ def create_exemption_declaration(employee, payroll_period):
 			"doctype": "Employee Tax Exemption Declaration",
 			"employee": employee,
 			"payroll_period": payroll_period,
-			"company": erpnext.get_default_company(),
-			"currency": erpnext.get_default_currency(),
+			"company": es_erp.get_default_company(),
+			"currency": es_erp.get_default_currency(),
 		}
 	)
 	declaration.append(
@@ -2518,7 +2518,7 @@ def create_proof_submission(employee, payroll_period, amount):
 			"employee": employee,
 			"payroll_period": payroll_period.name,
 			"submission_date": submission_date,
-			"currency": erpnext.get_default_currency(),
+			"currency": es_erp.get_default_currency(),
 		}
 	)
 	proof_submission.append(
@@ -2543,7 +2543,7 @@ def create_benefit_claim(employee, payroll_period, amount, component):
 			"claimed_amount": amount,
 			"claim_date": claim_date,
 			"earning_component": component,
-			"currency": erpnext.get_default_currency(),
+			"currency": es_erp.get_default_currency(),
 		}
 	).submit()
 	return claim_date
@@ -2559,10 +2559,10 @@ def create_tax_slab(
 	apply_tax_relief=False,
 ):
 	if not currency:
-		currency = erpnext.get_default_currency()
+		currency = es_erp.get_default_currency()
 
 	if company:
-		currency = erpnext.get_company_currency(company)
+		currency = es_erp.get_company_currency(company)
 
 	slabs = [
 		{
@@ -2645,12 +2645,12 @@ def create_additional_salary(employee, payroll_period, amount):
 		{
 			"doctype": "Additional Salary",
 			"employee": employee,
-			"company": erpnext.get_default_company(),
+			"company": es_erp.get_default_company(),
 			"salary_component": "Performance Bonus",
 			"payroll_date": salary_date,
 			"amount": amount,
 			"type": "Earning",
-			"currency": erpnext.get_default_currency(),
+			"currency": es_erp.get_default_currency(),
 		}
 	).submit()
 	return salary_date
@@ -2679,7 +2679,7 @@ def make_leave_application(
 			to_date=to_date,
 			half_day=half_day,
 			half_day_date=half_day_date,
-			company=company or erpnext.get_default_company() or "_Test Company",
+			company=company or es_erp.get_default_company() or "_Test Company",
 			status="Approved",
 			leave_approver="test@example.com",
 		)
@@ -2713,7 +2713,7 @@ def setup_test():
 	make_payroll_period()
 
 	frappe.db.set_value(
-		"Company", erpnext.get_default_company(), "default_holiday_list", "Salary Slip Test Holiday List"
+		"Company", es_erp.get_default_company(), "default_holiday_list", "Salary Slip Test Holiday List"
 	)
 
 	frappe.db.set_single_value("Payroll Settings", "email_salary_slip_to_employee", 0)
@@ -2722,7 +2722,7 @@ def setup_test():
 
 
 def make_payroll_period():
-	default_company = erpnext.get_default_company()
+	default_company = es_erp.get_default_company()
 	company_based_payroll_period = {
 		default_company: f"_Test Payroll Period {default_company}",
 		"_Test Company": "_Test Payroll Period",
@@ -2744,7 +2744,7 @@ def make_payroll_period():
 def make_holiday_list(
 	list_name=None, from_date=None, to_date=None, add_weekly_offs=True, weekly_off_days=None
 ):
-	fiscal_year = get_fiscal_year(nowdate(), company=erpnext.get_default_company())
+	fiscal_year = get_fiscal_year(nowdate(), company=es_erp.get_default_company())
 	name = list_name or "Salary Slip Test Holiday List"
 
 	frappe.delete_doc_if_exists("Holiday List", name, force=True)
@@ -2898,14 +2898,14 @@ def create_recurring_additional_salary(employee, salary_component, amount, from_
 		{
 			"doctype": "Additional Salary",
 			"employee": employee,
-			"company": company or erpnext.get_default_company(),
+			"company": company or es_erp.get_default_company(),
 			"salary_component": salary_component,
 			"is_recurring": 1,
 			"from_date": from_date,
 			"to_date": to_date,
 			"amount": amount,
 			"type": "Earning",
-			"currency": erpnext.get_default_currency(),
+			"currency": es_erp.get_default_currency(),
 		}
 	).submit()
 

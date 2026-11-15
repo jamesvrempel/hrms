@@ -5,7 +5,7 @@ import frappe
 from frappe.core.doctype.user_permission.test_user_permission import create_user
 from frappe.tests.utils import FrappeTestCase
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.doctype.training_event.test_training_event import (
 	create_training_event,

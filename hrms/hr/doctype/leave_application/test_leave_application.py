@@ -15,8 +15,8 @@ from frappe.utils import (
 	nowdate,
 )
 
-from erpnext.setup.doctype.employee.test_employee import make_employee
-from erpnext.setup.doctype.holiday_list.test_holiday_list import set_holiday_list
+from es_erp.setup.doctype.employee.test_employee import make_employee
+from es_erp.setup.doctype.holiday_list.test_holiday_list import set_holiday_list
 
 from hrms.hr.doctype.attendance.attendance import mark_attendance
 from hrms.hr.doctype.leave_allocation.test_leave_allocation import create_leave_allocation
@@ -543,7 +543,7 @@ class TestLeaveApplication(FrappeTestCase):
 		application.insert()
 
 	def test_overlap_with_half_day_on_today(self):
-		from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
+		from es_erp.setup.doctype.employee.employee import get_holiday_list_for_employee
 
 		self._clear_roles()
 

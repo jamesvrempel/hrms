@@ -5,9 +5,9 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt, nowdate, random_string
 
-from erpnext.accounts.doctype.account.test_account import create_account
-from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
-from erpnext.setup.doctype.employee.test_employee import make_employee
+from es_erp.accounts.doctype.account.test_account import create_account
+from es_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+from es_erp.setup.doctype.employee.test_employee import make_employee
 
 from hrms.hr.doctype.expense_claim.expense_claim import (
 	MismatchError,
@@ -593,13 +593,13 @@ class TestExpenseClaim(FrappeTestCase):
 		self.assertEqual(expense_claim.total_amount_reimbursed, 5500)
 
 	def test_expense_claim_against_delivery_trip(self):
-		from erpnext.stock.doctype.delivery_trip.test_delivery_trip import (
+		from es_erp.stock.doctype.delivery_trip.test_delivery_trip import (
 			create_address,
 			create_delivery_trip,
 			create_driver,
 			create_vehicle,
 		)
-		from erpnext.tests.utils import create_test_contact_and_address
+		from es_erp.tests.utils import create_test_contact_and_address
 
 		driver = create_driver()
 		create_vehicle()

@@ -9,13 +9,13 @@ from frappe.model.workflow import get_workflow_name
 from frappe.query_builder.functions import Sum
 from frappe.utils import cstr, flt, get_link_to_form
 
-import erpnext
-from erpnext.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger import (
+import es_erp
+from es_erp.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger import (
 	validate_docs_for_voucher_types,
 )
-from erpnext.accounts.doctype.sales_invoice.sales_invoice import get_bank_cash_account
-from erpnext.accounts.general_ledger import make_gl_entries
-from erpnext.controllers.accounts_controller import AccountsController
+from es_erp.accounts.doctype.sales_invoice.sales_invoice import get_bank_cash_account
+from es_erp.accounts.general_ledger import make_gl_entries
+from es_erp.controllers.accounts_controller import AccountsController
 
 import hrms
 from hrms.hr.utils import set_employee_name, share_doc_with_approver, validate_active_employee
@@ -314,7 +314,7 @@ class ExpenseClaim(AccountsController, PWANotificationsMixin):
 			)
 
 	def set_default_accounting_dimension(self):
-		from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+		from es_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 			get_checks_for_pl_and_bs_accounts,
 		)
 
@@ -505,7 +505,7 @@ def get_outstanding_amount_for_claim(claim):
 
 @frappe.whitelist()
 def make_bank_entry(dt, dn):
-	from erpnext.accounts.doctype.journal_entry.journal_entry import get_default_bank_cash_account
+	from es_erp.accounts.doctype.journal_entry.journal_entry import get_default_bank_cash_account
 
 	expense_claim = frappe.get_doc(dt, dn)
 	default_bank_cash_account = get_default_bank_cash_account(expense_claim.company, "Bank")
@@ -527,7 +527,7 @@ def make_bank_entry(dt, dn):
 			"reference_type": "Expense Claim",
 			"party_type": "Employee",
 			"party": expense_claim.employee,
-			"cost_center": erpnext.get_default_cost_center(expense_claim.company),
+			"cost_center": es_erp.get_default_cost_center(expense_claim.company),
 			"reference_name": expense_claim.name,
 		},
 	)
@@ -539,7 +539,7 @@ def make_bank_entry(dt, dn):
 			"credit_in_account_currency": payable_amount,
 			"balance": default_bank_cash_account.balance,
 			"account_currency": default_bank_cash_account.account_currency,
-			"cost_center": erpnext.get_default_cost_center(expense_claim.company),
+			"cost_center": es_erp.get_default_cost_center(expense_claim.company),
 			"account_type": default_bank_cash_account.account_type,
 		},
 	)
@@ -550,7 +550,7 @@ def make_bank_entry(dt, dn):
 @frappe.whitelist()
 def get_expense_claim_account_and_cost_center(expense_claim_type, company):
 	data = get_expense_claim_account(expense_claim_type, company)
-	cost_center = erpnext.get_default_cost_center(company)
+	cost_center = es_erp.get_default_cost_center(company)
 
 	return {"account": data.get("account"), "cost_center": cost_center}
 

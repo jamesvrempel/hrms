@@ -5,7 +5,7 @@ import frappe
 from frappe.query_builder.functions import Coalesce, Max, Min, NullIf, Sum
 from frappe.utils import flt
 
-from erpnext.projects.doctype.project.project import Project
+from es_erp.projects.doctype.project.project import Project
 
 
 class EmployeeProject(Project):

@@ -2,7 +2,7 @@
 // License: GNU General Public License v3. See license.txt
 
 frappe.provide("hrms.hr");
-frappe.provide("erpnext.accounts.dimensions");
+frappe.provide("es_erp.accounts.dimensions");
 
 frappe.ui.form.on("Expense Claim", {
 	setup: function (frm) {
@@ -13,7 +13,7 @@ frappe.ui.form.on("Expense Claim", {
 					["employee", "=", frm.doc.employee],
 					["paid_amount", ">", 0],
 					["status", "not in", ["Claimed", "Returned", "Partly Claimed and Returned"]],
-					["currency", "=", erpnext.get_currency(frm.doc.company)],
+					["currency", "=", es_erp.get_currency(frm.doc.company)],
 				],
 			};
 		});
@@ -62,7 +62,7 @@ frappe.ui.form.on("Expense Claim", {
 
 		frm.set_query("employee", function () {
 			return {
-				query: "erpnext.controllers.queries.employee_query",
+				query: "es_erp.controllers.queries.employee_query",
 			};
 		});
 
@@ -80,7 +80,7 @@ frappe.ui.form.on("Expense Claim", {
 	},
 
 	onload: function (frm) {
-		erpnext.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
+		es_erp.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
 
 		if (frm.doc.docstatus == 0) {
 			return frappe.call({
@@ -240,7 +240,7 @@ frappe.ui.form.on("Expense Claim", {
 	},
 
 	company: function (frm) {
-		erpnext.accounts.dimensions.update_dimension(frm, frm.doctype);
+		es_erp.accounts.dimensions.update_dimension(frm, frm.doctype);
 		var expenses = frm.doc.expenses;
 		for (var i = 0; i < expenses.length; i++) {
 			var expense = expenses[i];
@@ -403,7 +403,7 @@ frappe.ui.form.on("Expense Claim Detail", {
 	},
 
 	cost_center: function (frm, cdt, cdn) {
-		erpnext.utils.copy_value_in_all_rows(frm.doc, cdt, cdn, "expenses", "cost_center");
+		es_erp.utils.copy_value_in_all_rows(frm.doc, cdt, cdn, "expenses", "cost_center");
 	},
 });
 

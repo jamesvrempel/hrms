@@ -4,7 +4,7 @@ app_publisher = "Frappe Technologies Pvt. Ltd."
 app_description = "Modern HR and Payroll Software"
 app_email = "contact@frappe.io"
 app_license = "GNU General Public License (v3)"
-required_apps = ["frappe/erpnext"]
+required_apps = ["jamesvrempel/es_erp"]
 source_link = "http://github.com/frappe/hrms"
 
 add_to_apps_screen = [
@@ -140,7 +140,7 @@ before_app_uninstall = "hrms.setup.before_app_uninstall"
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
-has_upload_permission = {"Employee": "erpnext.setup.doctype.employee.employee.has_upload_permission"}
+has_upload_permission = {"Employee": "es_erp.setup.doctype.employee.employee.has_upload_permission"}
 
 # DocType Class
 # ---------------
@@ -160,7 +160,7 @@ override_doctype_class = {
 doc_events = {
 	"User": {
 		"validate": [
-			"erpnext.setup.doctype.employee.employee.validate_employee_role",
+			"es_erp.setup.doctype.employee.employee.validate_employee_role",
 			"hrms.overrides.employee_master.update_approver_user_roles",
 		],
 	},
@@ -375,4 +375,4 @@ company_data_to_be_ignored = [
 ]
 
 # List of apps whose translatable strings should be excluded from this app's translations.
-ignore_translatable_strings_from = ["frappe", "erpnext"]
+ignore_translatable_strings_from = ["frappe", "es_erp"]
