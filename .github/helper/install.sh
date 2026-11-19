@@ -4,13 +4,22 @@ set -e
 
 cd ~ || exit
 
+# This fork runs on the ES ERP stack, not upstream ERPNext, so the branch being
+# tested (main) has no counterpart in frappe/frappe. Each dependency is pinned
+# to its own branch here; override through the environment when needed.
+frappe_branch=${FRAPPE_BRANCH:-"version-15"}
+es_erp_repo=${ES_ERP_REPO:-"https://github.com/jamesvrempel/es_erp"}
+es_erp_branch=${ES_ERP_BRANCH:-"main"}
+payments_repo=${PAYMENTS_REPO:-"https://github.com/jamesvrempel/payments"}
+payments_branch=${PAYMENTS_BRANCH:-"main"}
+
 sudo apt update
 sudo apt remove mysql-server mysql-client
 sudo apt install libcups2-dev redis-server mariadb-client
 
 pip install frappe-bench
 
-git clone https://github.com/frappe/frappe --branch "$BRANCH_TO_CLONE" --depth 1
+git clone https://github.com/frappe/frappe --branch "$frappe_branch" --depth 1
 bench init --skip-assets --frappe-path ~/frappe --python "$(which python)" frappe-bench
 
 mkdir ~/frappe-bench/sites/test_site
@@ -41,9 +50,11 @@ sed -i 's/schedule:/# schedule:/g' Procfile
 sed -i 's/socketio:/# socketio:/g' Procfile
 sed -i 's/redis_socketio:/# redis_socketio:/g' Procfile
 
-bench get-app payments --branch ${BRANCH_TO_CLONE%"-hotfix"}
-bench get-app https://github.com/frappe/erpnext --branch "$BRANCH_TO_CLONE" --resolve-deps
-bench get-app https://github.com/frappe/lending --branch ${BRANCH_TO_CLONE%"-hotfix"}
+bench get-app "$payments_repo" --branch "$payments_branch"
+bench get-app "$es_erp_repo" --branch "$es_erp_branch"
+# Upstream frappe/lending imports the erpnext package, which does not exist on
+# the ES ERP stack, so it is not installed. The loan tests are guarded by
+# if_lending_app_installed and skip themselves without it.
 bench get-app hrms "${GITHUB_WORKSPACE}"
 bench setup requirements --dev
 
@@ -51,5 +62,4 @@ bench start &>> ~/frappe-bench/bench_start.log &
 CI=Yes bench build --app frappe &
 bench --site test_site reinstall --yes
 
-bench --verbose --site test_site install-app lending
 bench --verbose --site test_site install-app hrms

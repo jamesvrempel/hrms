@@ -16,9 +16,6 @@ on:
   schedule:
     # Run everday at midnight UTC / 5:30 IST
     - cron: "0 0 * * *"
-env:
-    HR_BRANCH: ${{ github.base_ref || github.ref_name }}
-
 concurrency:
   group: develop-${{ github.event.number }}
   cancel-in-progress: true
@@ -110,8 +107,6 @@ jobs:
       - name: Install
         run: |
           bash ${GITHUB_WORKSPACE}/.github/helper/install.sh
-        env:
-          BRANCH_TO_CLONE: ${{ env.HR_BRANCH }}
 
       - name: Run Tests
         run: cd ~/frappe-bench/ && bench --site test_site run-parallel-tests --app hrms --total-builds 2 --build-number ${{ matrix.container }}
