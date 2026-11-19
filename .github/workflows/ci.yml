@@ -16,6 +16,7 @@ on:
   schedule:
     # Run everday at midnight UTC / 5:30 IST
     - cron: "0 0 * * *"
+  workflow_dispatch:
 concurrency:
   group: develop-${{ github.event.number }}
   cancel-in-progress: true
@@ -136,5 +137,7 @@ jobs:
       - name: Upload coverage data
         uses: codecov/codecov-action@v2
         with:
-          fail_ci_if_error: true
+          # No Codecov token is configured for this fork; a failed upload must not
+          # turn a green test run red.
+          fail_ci_if_error: false
           verbose: true
